@@ -8,7 +8,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name = "ticket")
-
 public class Ticket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,5 +16,7 @@ public class Ticket {
 	private String descripcion;
 	private TicketStatus status;
     private Usuario reporter;
+    
+    
     
 }
