@@ -1,0 +1,11 @@
+# 1. Agregar todos los cambios (archivos nuevos, modificados y eliminados)
+git add -A
+
+# 2. Hacer commit con un mensaje
+git commit -m "Mensaje descriptivo de los cambios"
+
+# 3. Traer cambios del remoto y rebasar tu rama
+git pull --rebase origin master
+
+# 4. Subir tus cambios al remoto
+git push origin master
