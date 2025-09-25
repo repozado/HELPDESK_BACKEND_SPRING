@@ -12,7 +12,7 @@
 	<artifactId>HELPDESK_BACKEND</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>HELPDESK_BACKEND</name>
-	<description>Demo project for Spring Boot</description>
+	<description> Helpdesk</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -55,6 +55,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <optional>true</optional>
+	   </dependency>
 	</dependencies>
 
 	<build>
