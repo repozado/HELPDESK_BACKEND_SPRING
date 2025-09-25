@@ -19,7 +19,7 @@ import lombok.Data;
 @Data
 public class Ticket {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_ticket;
 	@Column(name = "title")
 	private String title;
