@@ -45,11 +45,12 @@ public class Ticket {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_asignado", referencedColumnName = "id_usuario" )
     private Usuario id_usuario_asignado;
-	@Temporal(TemporalType.TIMESTAMP)
+	
+
 	private LocalDateTime fecha_creacion;
-	@Temporal(TemporalType.TIMESTAMP)
+
 	private LocalDateTime fecha_actualizacion;
-	@Temporal(TemporalType.TIMESTAMP)
+
 	private LocalDateTime fecha_cierre;
 	
 	private Boolean cerrado;
