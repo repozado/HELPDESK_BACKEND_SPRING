@@ -16,21 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.models.TicketStatus;
-import com.example.repo.ITicketStatusRepo;
 import com.example.service.ITicketStatusService;
 
 @RestController
 @RequestMapping("/api/ticketstatus")
 public class TicketStatusController {
 
-    private final ITicketStatusRepo ITicketStatusRepo;
-
 	@Autowired
 	private ITicketStatusService service;
-
-    TicketStatusController(ITicketStatusRepo ITicketStatusRepo) {
-        this.ITicketStatusRepo = ITicketStatusRepo;
-    }
 	
 	@GetMapping
 	public ResponseEntity<List<TicketStatus>> getAllStatus(){
