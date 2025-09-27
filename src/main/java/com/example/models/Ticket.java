@@ -11,14 +11,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table (name = "ticket")
 @Data
+@NoArgsConstructor      
+@AllArgsConstructor
 public class Ticket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

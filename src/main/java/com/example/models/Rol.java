@@ -12,19 +12,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "unidad_principal")
+@Table(name = "rol")
 @Data
 @NoArgsConstructor      
-@AllArgsConstructor
-public class UnidadPrincipal {
+@AllArgsConstructor     
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+public class Rol {
 
-	@Column(name = "estado")
-	private Boolean estado;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_rol")
+    private Integer idRol;
 
-	@Column(name = "nombre")
-	private String nombre;
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
+
+    @Column(name = "descripcion")
+    private String descripcion;
+
+   
+
+   
 }
