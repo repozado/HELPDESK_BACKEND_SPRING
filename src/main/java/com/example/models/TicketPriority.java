@@ -10,16 +10,25 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
 @Data
-@NoArgsConstructor      
+@NoArgsConstructor
 @AllArgsConstructor
-@Table(name="ticket_priority")
+@Table(name = "ticket_priority")
 public class TicketPriority {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_priority;
-	@Column( nullable = false)
-	private String nombre;
-	private String descripcion;
+
+	@Column(name = "nombre", nullable = false)
+	private String name;
+
+	@Column(name = "descripcion")
+	private String description;
+
+	// Tiempo máximo de resolución expresado en horas
+	@Column(name = "tiempo_resolucion", nullable = false)
+	private Integer resolutionTimeHours;
 }
