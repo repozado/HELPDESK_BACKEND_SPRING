@@ -11,6 +11,6 @@ public interface ITicketPriorityService {
 	List<TicketPriority> getAll();
 	Optional<TicketPriority> findById(Integer id);
 	TicketPriority create(TicketPriority priority);
-	TicketPriority update(TicketPriority priority);
+	TicketPriority update(Integer id,TicketPriority priority);
 	void delete(Integer id);
 }

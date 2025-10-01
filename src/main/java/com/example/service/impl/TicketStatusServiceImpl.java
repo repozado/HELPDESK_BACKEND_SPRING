@@ -31,8 +31,9 @@ public class TicketStatusServiceImpl implements ITicketStatusService {
 		return repo.save(status);
 	}
 	@Override
-	public TicketStatus update(TicketStatus status) {
-		if(repo.existsById(status.getId_status())) {
+	public TicketStatus update(Integer id,TicketStatus status) {
+		if(repo.existsById(id)){
+			status.setId_status(id);
 			return repo.save(status);
 		}
 		return null;
@@ -44,5 +45,6 @@ public class TicketStatusServiceImpl implements ITicketStatusService {
 			repo.deleteById(id);
 		}
 	}
+
 
 }

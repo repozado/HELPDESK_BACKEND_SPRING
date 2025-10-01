@@ -20,16 +20,16 @@ import com.example.models.TicketStatus;
 import com.example.service.ITicketPriorityService;
 
 @RestController
-@RequestMapping("/api/ticket_priority")
+@RequestMapping("/api/ticketpriority")
 public class TicketPriorityController {
 	@Autowired
 	private ITicketPriorityService service;
 	
 	
 	@GetMapping
-	public ResponseEntity<List<TicketPriority>> getAllPriority(){
-		List<TicketPriority> prioritys = service.getAll();
-		return new ResponseEntity<List<TicketPriority>>(prioritys, HttpStatus.OK);
+	public ResponseEntity<List<TicketPriority>> getAllPriorities(){
+		List<TicketPriority> priorities= service.getAll();
+		return new ResponseEntity<List<TicketPriority>>(priorities, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
@@ -39,20 +39,20 @@ public class TicketPriorityController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TicketPriority> createdPriority(@RequestBody TicketPriority priority){
+	public ResponseEntity<TicketPriority> createPriority(@RequestBody TicketPriority priority){
 		TicketPriority createpriority = service.create(priority);
-		return new ResponseEntity<TicketPriority>(createpriority, HttpStatus.OK);
+		return new ResponseEntity<TicketPriority>(createpriority, HttpStatus.CREATED);
 	}
 	
-	@PutMapping
-	public ResponseEntity<TicketPriority> updatePriority(@RequestBody TicketPriority priority){
-		TicketPriority updatestatus = service.update(priority);
-		return new ResponseEntity<TicketPriority>(updatestatus, HttpStatus.OK);
+	@PutMapping("/{id}")
+	public ResponseEntity<TicketPriority> updatePriority(@PathVariable("id")Integer id,@RequestBody TicketPriority priority){
+		TicketPriority updatpriority = service.update(id,priority);
+		return new ResponseEntity<TicketPriority>(updatpriority, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<TicketPriority>deletePriority(@PathVariable("id") Integer id) {
 		service.delete(id);
-		return new ResponseEntity<TicketPriority>(HttpStatus.OK);
+		return new ResponseEntity<TicketPriority>(HttpStatus.NO_CONTENT);
 	}
 }

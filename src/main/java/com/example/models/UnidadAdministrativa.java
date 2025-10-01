@@ -34,4 +34,5 @@ public class UnidadAdministrativa {
     @ManyToOne
     @JoinColumn(name = "id_unidadp", referencedColumnName = "id")
     private UnidadPrincipal idUnidadp;
+    
 }

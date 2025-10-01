@@ -9,6 +9,6 @@ public interface ITicketStatusService {
 	List<TicketStatus> getAll();
 	Optional<TicketStatus> findById(Integer id);
 	TicketStatus create(TicketStatus status);
-	TicketStatus update(TicketStatus status);
+	TicketStatus update(Integer id, TicketStatus status);
 	void delete(Integer id);
 }

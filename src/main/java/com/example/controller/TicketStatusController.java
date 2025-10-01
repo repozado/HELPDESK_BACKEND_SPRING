@@ -1,4 +1,4 @@
- package com.example.controller;
+package com.example.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,14 +38,14 @@ public class TicketStatusController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TicketStatus> createdStatus(@RequestBody TicketStatus status){
+	public ResponseEntity<TicketStatus> createStatus(@RequestBody TicketStatus status){
 		TicketStatus createstatus = service.create(status);
 		return new ResponseEntity<TicketStatus>(createstatus, HttpStatus.OK);
 	}
 	
-	@PutMapping
-	public ResponseEntity<TicketStatus> updateStatus(@RequestBody TicketStatus status){
-		TicketStatus updatestatus = service.update(status);
+	@PutMapping("/{id}")
+	public ResponseEntity<TicketStatus> updateStatus(@PathVariable("id") Integer id,@RequestBody TicketStatus status){
+		TicketStatus updatestatus = service.update(id,status);
 		return new ResponseEntity<TicketStatus>(updatestatus, HttpStatus.OK);
 	}
 	

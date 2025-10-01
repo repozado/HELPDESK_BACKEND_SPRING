@@ -1,5 +1,6 @@
 package com.example.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class TicketPriority {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_priority;
+	@Column( nullable = false)
 	private String nombre;
 	private String descripcion;
 }

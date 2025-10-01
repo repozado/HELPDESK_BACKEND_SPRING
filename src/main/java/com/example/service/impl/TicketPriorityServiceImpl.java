@@ -33,8 +33,9 @@ public class TicketPriorityServiceImpl implements ITicketPriorityService{
 	}
 
 	@Override
-	public TicketPriority update(TicketPriority priority) {
-		if(repo.existsById(priority.getId_priority())) {
+	public TicketPriority update(Integer id,TicketPriority priority) {
+		if(repo.existsById(id)) {
+			priority.setId_priority(id);
 			return repo.save(priority);
 		}
 		return null;

@@ -20,8 +20,7 @@ public class TicketStatus {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_status;
-	@Column(name="nombre", nullable = false)
+	@Column( nullable = false)
 	private String nombre;	
-	@Column(name="descripcion", nullable = false)
 	private String descripcion;	
 }

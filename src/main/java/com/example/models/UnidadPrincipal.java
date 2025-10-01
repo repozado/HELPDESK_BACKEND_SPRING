@@ -27,4 +27,5 @@ public class UnidadPrincipal {
 
 	@Column(name = "nombre")
 	private String nombre;
+	
 }
