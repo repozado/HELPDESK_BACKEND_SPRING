@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.models.Usuario;
 import com.example.service.IUsuarioService;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/usuario")
 public class UsuarioController {
