@@ -16,15 +16,19 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table (name = "ticket")
 @Data
 @NoArgsConstructor      
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ticket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,10 +59,10 @@ public class Ticket {
 	@ManyToOne
 	@JoinColumn(name = "inventory_unit")
 	private InventoryUnit equipoAfectado;
-
+	
+	@Column(name = "fecha_creacion", updatable = false)
 	private LocalDateTime fecha_creacion;
 
-	
 	private LocalDateTime fecha_actualizacion;
 
 	private LocalDateTime fecha_cierre;
@@ -74,7 +78,7 @@ public class Ticket {
     protected void onUpdate() {
         this.fecha_actualizacion = LocalDateTime.now();
         
-        if (this.status != null && "Cerrado".equalsIgnoreCase(this.status.getNombre())) { 
+        if (this.status != null && "CERRADO".equalsIgnoreCase(this.status.getNombre())) { 
            
             if (this.fecha_cierre == null) {
                 this.fecha_cierre = this.fecha_actualizacion;
