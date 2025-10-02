@@ -15,8 +15,11 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -61,28 +64,19 @@ public class Ticket {
 	private InventoryUnit equipoAfectado;
 	
 	@Column(name = "fecha_creacion", updatable = false)
+	@CreationTimestamp
 	private LocalDateTime fecha_creacion;
-
+	@UpdateTimestamp
 	private LocalDateTime fecha_actualizacion;
 
 	private LocalDateTime fecha_cierre;
 
-	
-	@PrePersist
-    protected void onCreate() {
-        this.fecha_creacion = LocalDateTime.now();
-        this.fecha_actualizacion = this.fecha_creacion;
-    }
-
     @PreUpdate
     protected void onUpdate() {
-        this.fecha_actualizacion = LocalDateTime.now();
         
         if (this.status != null && "CERRADO".equalsIgnoreCase(this.status.getNombre())) { 
            
-            if (this.fecha_cierre == null) {
-                this.fecha_cierre = this.fecha_actualizacion;
-            }
+        	this.fecha_cierre= LocalDateTime.now();
         } else {
             this.fecha_cierre = null;
         }
