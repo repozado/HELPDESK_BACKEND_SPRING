@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.models.TicketPriority;
-import com.example.models.TicketStatus;
 import com.example.service.ITicketPriorityService;
 
 @CrossOrigin(origins = "*")

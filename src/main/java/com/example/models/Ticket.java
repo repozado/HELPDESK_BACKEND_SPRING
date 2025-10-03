@@ -10,28 +10,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
+
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table (name = "ticket")
+@Table(name = "ticket")
 @Data
-@NoArgsConstructor      
+@NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Ticket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,11 +37,11 @@ public class Ticket {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "descripcion", columnDefinition = "text" )
+	@Column(name = "descripcion", columnDefinition = "text")
 	private String descripcion;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_status", nullable = false )
+	@JoinColumn(name = "id_status", nullable = false)
 	private TicketStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -52,17 +49,17 @@ public class Ticket {
 	private TicketPriority priority;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_usuario_creador", nullable = false )
+	@JoinColumn(name = "id_usuario_creador", nullable = false)
 	private Usuario usuario_creador;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_usuario_asignado", referencedColumnName = "id_usuario" )
+	@JoinColumn(name = "id_usuario_asignado", referencedColumnName = "id_usuario")
 	private Usuario usuario_asignado;
 
 	@ManyToOne
 	@JoinColumn(name = "inventory_unit")
 	private InventoryUnit equipoAfectado;
-	
+
 	@Column(name = "fecha_creacion", updatable = false)
 	@CreationTimestamp
 	private LocalDateTime fecha_creacion;
@@ -71,15 +68,15 @@ public class Ticket {
 
 	private LocalDateTime fecha_cierre;
 
-    @PreUpdate
-    protected void onUpdate() {
-        
-        if (this.status != null && "CERRADO".equalsIgnoreCase(this.status.getNombre())) { 
-           
-        	this.fecha_cierre= LocalDateTime.now();
-        } else {
-            this.fecha_cierre = null;
-        }
-    }
+	@PreUpdate
+	protected void onUpdate() {
+
+		if (this.status != null && "CERRADO".equalsIgnoreCase(this.status.getNombre())) {
+
+			this.fecha_cierre = LocalDateTime.now();
+		} else {
+			this.fecha_cierre = null;
+		}
+	}
 
 }
