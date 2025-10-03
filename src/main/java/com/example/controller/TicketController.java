@@ -51,8 +51,12 @@ public class TicketController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Ticket>deleteTicket(@PathVariable("id") Integer id) {
-		service.delete(id);
-		return new ResponseEntity<Ticket>(HttpStatus.OK);
+	public ResponseEntity<Void> deleteTicket(@PathVariable("id") Integer id) {
+	    try {
+	        service.delete(id);
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
 	}
 }
