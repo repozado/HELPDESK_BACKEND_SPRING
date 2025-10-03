@@ -40,23 +40,23 @@ public class Ticket {
 	@Column(name = "descripcion", columnDefinition = "text")
 	private String descripcion;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_status", nullable = false)
 	private TicketStatus status;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_priority")
 	private TicketPriority priority;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_usuario_creador", nullable = false)
 	private Usuario usuario_creador;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_usuario_asignado", referencedColumnName = "id_usuario")
 	private Usuario usuario_asignado;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER) 
 	@JoinColumn(name = "inventory_unit")
 	private InventoryUnit equipoAfectado;
 
