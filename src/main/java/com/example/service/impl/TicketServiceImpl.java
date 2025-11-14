@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.models.Ticket;
 import com.example.repo.ITicketRepo;
+import com.example.repo.IUsuarioRepo;
 import com.example.service.ITicketService;
 
 @Service
@@ -18,6 +19,9 @@ public class TicketServiceImpl implements ITicketService{
 
 	@Autowired
 	private ITicketRepo repo;
+    
+	@Autowired
+	private IUsuarioRepo usuarioRepo;
 	
 	@Transactional
 	@Override
@@ -34,6 +38,13 @@ public class TicketServiceImpl implements ITicketService{
 	@Transactional
 	@Override
 	public Ticket create(Ticket ticket) {
+		// Asegurarnos de que el usuario creador (si viene) sea una entidad gestionada
+		if (ticket.getUsuario_creador() != null) {
+			Integer idUsuario = ticket.getUsuario_creador().getIdUsuario();
+			if (idUsuario != null) {
+				usuarioRepo.findById(idUsuario).ifPresent(ticket::setUsuario_creador);
+			}
+		}
 		return repo.save(ticket);
 	}
 

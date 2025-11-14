@@ -1,7 +1,12 @@
 package com.example.controller;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.models.Ticket;
+import com.example.models.TicketStatus;
+import com.example.models.Usuario;
+import com.example.repo.ITicketRepo;
+import com.example.repo.ITicketStatusRepo;
+import com.example.repo.IUsuarioRepo;
 import com.example.service.ITicketService;
 
 @CrossOrigin(origins = "*")
@@ -25,6 +35,15 @@ import com.example.service.ITicketService;
 public class TicketController {
 	@Autowired
 	private ITicketService service;
+	
+	@Autowired
+	private ITicketRepo ticketRepository;
+	
+	@Autowired
+	private IUsuarioRepo usuarioRepository;
+	
+	@Autowired
+	private ITicketStatusRepo ticketStatusRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<Ticket>> getAllTicket(){
@@ -58,5 +77,197 @@ public class TicketController {
 	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
+	}
+
+	// ==================== NUEVOS ENDPOINTS PARA CONTROL DE ROLES ====================
+
+	/**
+	 * Obtener tickets por usuario según su rol
+	 * - ADMIN: Todos los tickets
+	 * - AGENTE: Solo tickets asignados a él
+	 * - CLIENTE: Solo tickets creados por él
+	 */
+	@GetMapping("/user/{idUsuario}")
+	public ResponseEntity<?> getTicketsByUser(@PathVariable Integer idUsuario) {
+		Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+		
+		if (usuario == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<String> roles = usuario.getUsuarioRoles().stream()
+			.map(ur -> ur.getRol().getNombre())
+			.collect(Collectors.toList());
+		
+		List<Ticket> tickets;
+		
+		if (roles.contains("ADMIN")) {
+			// Admin ve todos
+			tickets = ticketRepository.findAll();
+		} else if (roles.contains("AGENTE")) {
+			// Agente ve solo sus asignados
+			tickets = ticketRepository.findByUsuarioAsignado(usuario);
+		} else if (roles.contains("CLIENTE")) {
+			// Cliente ve solo los que creó
+			tickets = ticketRepository.findByUsuarioCreador(usuario);
+		} else {
+			tickets = new ArrayList<>();
+		}
+		
+		return ResponseEntity.ok(tickets);
+	}
+
+	/**
+	 * Obtener tickets pendientes del usuario
+	 */
+	@GetMapping("/pending/user/{idUsuario}")
+	public ResponseEntity<?> getTicketsPendientes(@PathVariable Integer idUsuario) {
+		Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+		
+		if (usuario == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<String> roles = usuario.getUsuarioRoles().stream()
+			.map(ur -> ur.getRol().getNombre())
+			.collect(Collectors.toList());
+		
+		Optional<TicketStatus> statusAbierto = ticketStatusRepository.findByNombre("ABIERTO");
+		List<Ticket> tickets;
+		
+		if (statusAbierto.isEmpty()) {
+			return ResponseEntity.ok(new ArrayList<>());
+		}
+		
+		if (roles.contains("ADMIN")) {
+			tickets = ticketRepository.findByStatus(statusAbierto.get());
+		} else if (roles.contains("AGENTE")) {
+			tickets = ticketRepository.findByUsuarioAsignadoAndStatus(usuario, statusAbierto.get());
+		} else if (roles.contains("CLIENTE")) {
+			tickets = ticketRepository.findByUsuarioCreadorAndStatus(usuario, statusAbierto.get());
+		} else {
+			tickets = new ArrayList<>();
+		}
+		
+		return ResponseEntity.ok(tickets);
+	}
+
+	/**
+	 * Obtener tickets resueltos del usuario
+	 */
+	@GetMapping("/resolved/user/{idUsuario}")
+	public ResponseEntity<?> getTicketsResueltos(@PathVariable Integer idUsuario) {
+		Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+		
+		if (usuario == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<String> roles = usuario.getUsuarioRoles().stream()
+			.map(ur -> ur.getRol().getNombre())
+			.collect(Collectors.toList());
+		
+		Optional<TicketStatus> statusCerrado = ticketStatusRepository.findByNombre("CERRADO");
+		List<Ticket> tickets;
+		
+		if (statusCerrado.isEmpty()) {
+			return ResponseEntity.ok(new ArrayList<>());
+		}
+		
+		if (roles.contains("ADMIN")) {
+			tickets = ticketRepository.findByStatus(statusCerrado.get());
+		} else if (roles.contains("AGENTE")) {
+			tickets = ticketRepository.findByUsuarioAsignadoAndStatus(usuario, statusCerrado.get());
+		} else if (roles.contains("CLIENTE")) {
+			tickets = ticketRepository.findByUsuarioCreadorAndStatus(usuario, statusCerrado.get());
+		} else {
+			tickets = new ArrayList<>();
+		}
+		
+		return ResponseEntity.ok(tickets);
+	}
+
+	/**
+	 * Obtener tickets asignados a un agente
+	 */
+	@GetMapping("/assigned/{idAgente}")
+	public ResponseEntity<?> getTicketsAsignados(@PathVariable Integer idAgente) {
+		Usuario agente = usuarioRepository.findById(idAgente).orElse(null);
+		
+		if (agente == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<Ticket> tickets = ticketRepository.findByUsuarioAsignado(agente);
+		return ResponseEntity.ok(tickets);
+	}
+
+	/**
+	 * Obtener tickets creados por un usuario
+	 */
+	@GetMapping("/created/{idUsuario}")
+	public ResponseEntity<?> getTicketsCreados(@PathVariable Integer idUsuario) {
+		Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+		
+		if (usuario == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<Ticket> tickets = ticketRepository.findByUsuarioCreador(usuario);
+		return ResponseEntity.ok(tickets);
+	}
+
+	/**
+	 * Obtener agente con menos carga de trabajo
+	 */
+	@GetMapping("/agent/least-loaded")
+	public ResponseEntity<?> getAgenteConMenosCarga() {
+		Optional<TicketStatus> statusAbierto = ticketStatusRepository.findByNombre("ABIERTO");
+		
+		List<Usuario> agentes = usuarioRepository.findAll().stream()
+			.filter(u -> u.getUsuarioRoles().stream()
+				.anyMatch(ur -> ur.getRol().getNombre().equals("AGENTE")))
+			.collect(Collectors.toList());
+		
+		if (agentes.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(Map.of("message", "No hay agentes disponibles"));
+		}
+		
+		final TicketStatus status = statusAbierto.orElse(null);
+		Usuario agenteMenosCarga;
+		
+		if (status != null) {
+			agenteMenosCarga = agentes.stream()
+				.min(Comparator.comparingInt(a -> 
+					ticketRepository.countByUsuarioAsignadoAndStatus(a, status)))
+				.get();
+		} else {
+			agenteMenosCarga = agentes.get(0);
+		}
+		
+		return ResponseEntity.ok(agenteMenosCarga);
+	}
+
+	/**
+	 * Obtener agentes disponibles
+	 */
+	@GetMapping("/agents/available")
+	public ResponseEntity<?> getAgentesDisponibles() {
+		List<Usuario> agentes = usuarioRepository.findAll().stream()
+			.filter(u -> u.getUsuarioRoles().stream()
+				.anyMatch(ur -> ur.getRol().getNombre().equals("AGENTE")))
+			.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(agentes);
+	}
+
+	/**
+	 * Obtener tickets sin asignar
+	 */
+	@GetMapping("/unassigned")
+	public ResponseEntity<?> getTicketsSinAsignar() {
+		List<Ticket> tickets = ticketRepository.findByUsuarioAsignadoIsNull();
+		return ResponseEntity.ok(tickets);
 	}
 }

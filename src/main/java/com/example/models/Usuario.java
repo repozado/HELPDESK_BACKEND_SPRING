@@ -1,6 +1,8 @@
 package com.example.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -67,5 +70,18 @@ public class Usuario {
     @JoinColumn(name = "id_uni_adm", referencedColumnName = "id_uni_adm", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private UnidadAdministrativa unidadAdministrativa;
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"usuario", "hibernateLazyInitializer", "handler"})
+    private List<UsuarioRol> usuarioRoles;
+
+    // Getters y Setters
+    public List<UsuarioRol> getUsuarioRoles() {
+        return usuarioRoles != null ? usuarioRoles : new ArrayList<>();
+    }
+
+    public void setUsuarioRoles(List<UsuarioRol> usuarioRoles) {
+        this.usuarioRoles = usuarioRoles;
+    }
 
 }

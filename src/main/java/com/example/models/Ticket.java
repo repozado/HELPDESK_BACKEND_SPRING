@@ -42,22 +42,27 @@ public class Ticket {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_status", nullable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private TicketStatus status;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_priority")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private TicketPriority priority;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_creador", nullable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "usuarioRoles", "unidadAdministrativa"})
 	private Usuario usuario_creador;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_asignado", referencedColumnName = "id_usuario")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "usuarioRoles", "unidadAdministrativa"})
 	private Usuario usuario_asignado;
 
-	@ManyToOne(fetch = FetchType.EAGER) 
+	@ManyToOne(fetch = FetchType.LAZY) 
 	@JoinColumn(name = "inventory_unit")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private InventoryUnit equipoAfectado;
 
 	@Column(name = "fecha_creacion", updatable = false)

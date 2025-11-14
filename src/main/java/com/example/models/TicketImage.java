@@ -21,12 +21,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ticket_comment")
+@Table(name = "ticket_image")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class TicketComment {
+public class TicketImage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -36,12 +36,11 @@ public class TicketComment {
 	@JoinColumn(name = "ticket_id", nullable = false)
 	private Ticket ticket;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "author_id", nullable = false)
-	private Usuario author;
+	@Column(name = "url_imagen", nullable = false)
+	private String urlImagen;
 
-	@Column(columnDefinition = "text", nullable = false)
-	private String message;
+	@Column(name = "descripcion")
+	private String descripcion;
 
 	@Column(name = "created_at", updatable = false)
 	@CreationTimestamp

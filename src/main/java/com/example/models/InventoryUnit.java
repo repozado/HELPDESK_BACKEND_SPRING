@@ -2,6 +2,7 @@ package com.example.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,8 +51,9 @@ public class InventoryUnit {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "custodian_id", referencedColumnName = "id_persona")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "unidadAdministrativa"})
     private Persona custodian;
 
     @Column(name = "url_img")
