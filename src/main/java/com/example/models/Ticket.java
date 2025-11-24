@@ -73,6 +73,11 @@ public class Ticket {
 
 	private LocalDateTime fecha_cierre;
 
+	@Column(name = "rating")
+	private Integer rating;
+
+	
+
 	@PreUpdate
 	protected void onUpdate() {
 
