@@ -30,8 +30,4 @@ public class TicketPriority {
 
 	@Column(name = "descripcion")
 	private String description;
-
-	// Tiempo máximo de resolución expresado en horas
-	@Column(name = "tiempo_resolucion", nullable = false)
-	private Integer resolutionTimeHours;
 }

@@ -60,6 +60,11 @@ public class Ticket {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "usuarioRoles", "unidadAdministrativa"})
 	private Usuario usuario_asignado;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_usuario_asigno", referencedColumnName = "id_usuario")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "usuarioRoles", "unidadAdministrativa"})
+	private Usuario usuario_asigno;
+
 	@ManyToOne(fetch = FetchType.LAZY) 
 	@JoinColumn(name = "inventory_unit")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -73,10 +78,14 @@ public class Ticket {
 
 	private LocalDateTime fecha_cierre;
 
+	@Column(name = "fecha_estimada")
+	private LocalDateTime fecha_estimada;
+
 	@Column(name = "rating")
 	private Integer rating;
 
-	
+	@Column(name = "comentario_rating", columnDefinition = "text")
+	private String comentario_rating;
 
 	@PreUpdate
 	protected void onUpdate() {
@@ -85,7 +94,7 @@ public class Ticket {
 
 			this.fecha_cierre = LocalDateTime.now();
 		} else {
-			this.fecha_cierre = null;
+			this.fecha_cierre =null;
 		}
 	}
 

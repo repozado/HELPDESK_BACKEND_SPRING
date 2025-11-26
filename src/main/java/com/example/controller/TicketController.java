@@ -65,6 +65,29 @@ public class TicketController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Ticket> updateTicket(@PathVariable("id") Integer id,@RequestBody Ticket ticket){
+		// Obtener el ticket actual para verificar si cambió el usuario asignado
+		Optional<Ticket> ticketActual = service.findById(id);
+		
+		if (ticketActual.isPresent()) {
+			Ticket ticketExistente = ticketActual.get();
+			
+			// Si cambió el usuario_asignado, guardar quien lo asignó (usuario_asigno)
+			if (ticket.getUsuario_asignado() != null && 
+			    (ticketExistente.getUsuario_asignado() == null || 
+			     !ticketExistente.getUsuario_asignado().getIdUsuario().equals(ticket.getUsuario_asignado().getIdUsuario()))) {
+				
+				// El usuario_asigno viene del frontend (el admin que está en sesión)
+				// El frontend debe enviar ticket.usuario_asigno con el ID del admin logueado
+				if (ticket.getUsuario_asigno() != null) {
+					Usuario admin = usuarioRepository.findById(ticket.getUsuario_asigno().getIdUsuario()).orElse(null);
+					ticket.setUsuario_asigno(admin);
+				}
+			} else {
+				// Si no cambió la asignación, mantener el usuario_asigno original
+				ticket.setUsuario_asigno(ticketExistente.getUsuario_asigno());
+			}
+		}
+		
 		Ticket updateticket = service.update(id,ticket);
 		return new ResponseEntity<Ticket>(updateticket, HttpStatus.OK);
 	}
